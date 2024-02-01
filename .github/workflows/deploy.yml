@@ -53,18 +53,16 @@ jobs:
         INPUT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         INPUT_DOCKER_HOST: 186.79.101.127
         INPUT_DOCKER_USER: ${{ secrets.DEPLOY_USERNAME }}
-        INPUT_DOCKER_COMMAND: ps
+        INPUT_DOCKER_COMMAND: up -d
       run: |
         # Start ssh-agent
         eval $(ssh-agent -s)
-        echo "La llave privada es: $INPUT_SSH_PRIVATE_KEY"
         # Add SSH private key to agent
         ssh-add - <<< "$INPUT_SSH_PRIVATE_KEY"
         # Create $HOME/.ssh folder for known_hosts file
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
-        echo "El host es: $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
         # Create Docker context using SSH
         docker context create github-action --docker "host=ssh://$INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
         # Execute docker command using created context
@@ -76,10 +74,10 @@ jobs:
         ssh-add -D
         # 🧹 Stop ssh-agent
         eval $(ssh-agent -k)
-    - name: connect and pull
-      run: ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
-    - name: cleanup
-      run: rm -rf ~/.ssh
+    # - name: connect and pull
+    #   run: ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
+    # - name: cleanup
+    #   run: rm -rf ~/.ssh
 
 
         # echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
