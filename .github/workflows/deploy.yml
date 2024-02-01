@@ -36,6 +36,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Depurar
+      run: echo ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127
     - name: Start Deployment
       uses: TapTap21/docker-remote-deployment-action@v1.0
       with:
@@ -43,6 +45,4 @@ jobs:
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         stack_file_name: docker-compose.yml
-        docker_login_password: ${{ secrets.DOCKER_REPO_PASSWORD }}
-        docker_login_user: ${{ secrets.DOCKER_REPO_USERNAME }}
         args: -p myapp up -d
