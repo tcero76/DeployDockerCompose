@@ -36,11 +36,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: astappiev/docker-compose-remote-action@master
-      name: Docker-Compose Remote Deployment
+    - name: Start Deployment
+      uses: TapTap21/docker-remote-deployment-action@v1.0
       with:
-        ssh_host: 186.79.101.127
-        ssh_user: ${{ secrets.DEPLOY_USERNAME }}
+        remote_docker_host: ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        docker_compose_prefix: myapp
+        ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        stack_file_name: docker-compose.yml
+        docker_login_password: ${{ secrets.DOCKER_REPO_PASSWORD }}
+        docker_login_user: ${{ secrets.DOCKER_REPO_USERNAME }}
+        args: -p myapp up -d
