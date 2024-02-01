@@ -64,11 +64,8 @@ jobs:
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
-        scp -i "$HOME/.ssh/id_rsa" \
-          -o UserKnownHostsFile=/dev/null \
-          -o StrictHostKeyChecking=no \
-          -P 22 \
-          $INPUT_DOCKER_COMPOSE "${{ secrets.DEPLOY_USERNAME }}@186.79.101.127/docker-compose.yml" 
+        echo $INPUT_DOCKER_COMPOSE
+        cat $INPUT_DOCKER_COMPOSE
         ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
         # 🧹 Remove $HOME/.ssh folder
         rm -rf $HOME/.ssh && echo "$HOME/.ssh folder removed"
@@ -90,3 +87,8 @@ jobs:
         # # Execute docker command using created context
         # 
         # # 🧹 Remove created Docker context
+        # scp -i "$HOME/.ssh/id_rsa" \
+        #   -o UserKnownHostsFile=/dev/null \
+        #   -o StrictHostKeyChecking=no \
+        #   -P 22 \
+        #   $INPUT_DOCKER_COMPOSE "${{ secrets.DEPLOY_USERNAME }}@186.79.101.127/docker-compose.yml" 
