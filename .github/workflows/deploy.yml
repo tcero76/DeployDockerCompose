@@ -57,12 +57,14 @@ jobs:
       run: |
         # Start ssh-agent
         eval $(ssh-agent -s)
+        echo "La llave privada es: $INPUT_SSH_PRIVATE_KEY"
         # Add SSH private key to agent
         ssh-add - <<< "$INPUT_SSH_PRIVATE_KEY"
         # Create $HOME/.ssh folder for known_hosts file
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
+        echo "El host es: $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
         # Create Docker context using SSH
         docker context create github-action --docker "host=ssh://$INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
         # Execute docker command using created context
