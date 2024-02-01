@@ -65,6 +65,7 @@ jobs:
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
+        chmod 600 ~/.ssh/id_rsa.pub
         # # 🧹 Remove created Docker context
         chmod 777 $INPUT_DOCKER_COMPOSE/docker-compose.yml
         scp -i "$HOME/.ssh/id_rsa" $INPUT_DOCKER_COMPOSE/docker-compose.yml "$INPUT_DOCKER_USER@$INPUT_DOCKER_HOST:/docker-compose.yml" 
