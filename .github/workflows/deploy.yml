@@ -54,7 +54,7 @@ jobs:
         eval $(ssh-agent -s)
         # register the private key with the agent.
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
-        printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+        printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa && echo $INPUT_SSH_PRIVATE_KEY
         chmod 600 ~/.ssh/id_rsa
         # Add SSH private key to agent
         ssh-add ~/.ssh/id_rsa && echo "SSH ADD lock ~/.ssh/id_rsa" 
