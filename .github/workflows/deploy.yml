@@ -34,10 +34,7 @@ jobs:
   #     - name: Push the Docker image
   #       run: ./gradlew :app:dockerPush
   deploy:
-    needs: publish
-    name: deploy image
     runs-on: ubuntu-latest
-
     steps:
     - name: install ssh keys
       # check this thread to understand why its needed:
