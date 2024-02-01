@@ -63,7 +63,12 @@ jobs:
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
-        DOCKER_CONTEXT=contextname docker compose up -d 
+        scp -i "$HOME/.ssh/id_rsa" \
+          -o UserKnownHostsFile=/dev/null \
+          -o StrictHostKeyChecking=no \
+          -P 22 \
+          docker-compose.yml "${{ secrets.DEPLOY_USERNAME }}@186.79.101.127/docker-compose.yml"
+        ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
         # 🧹 Remove $HOME/.ssh folder
         rm -rf $HOME/.ssh && echo "$HOME/.ssh folder removed"
         # 🧹 Remove SSH private key from ssh-agent
@@ -79,10 +84,8 @@ jobs:
         # echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         # ssh-keyscan -H ${{ secrets.DEPLOY_PUBLIC_KEY }} > ~/.ssh/known_hosts
 
-        #         # Create Docker context using SSH
+          # Create Docker context using SSH
         # docker context create github-action --docker "host=ssh://$INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
         # # Execute docker command using created context
         # 
         # # 🧹 Remove created Docker context
-
-                # ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
