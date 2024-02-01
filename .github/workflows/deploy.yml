@@ -36,11 +36,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: List images on remote Docker host
-      uses: 38ri581oq480/docker-run-command-remote-host-action@v0.0.1
-      with:
-        ssh_host_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-        ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        docker_host: 186.79.101.127
-        docker_command: image ls
-        docker_user: ${{ secrets.DEPLOY_USERNAME }}
+    # - name: List images on remote Docker host
+    #   uses: 38ri581oq480/docker-run-command-remote-host-action@v0.0.1
+    #   with:
+    #     ssh_host_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+    #     ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+    #     docker_host: 186.79.101.127
+    #     docker_command: image ls
+    #     docker_user: ${{ secrets.DEPLOY_USERNAME }}
+
+    - name: install ssh keys
+      # check this thread to understand why its needed:
+      # <https://stackoverflow.com/a/70447517>
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DEPLOY_PUBLIC_KEY }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
+    - name: cleanup
+      run: rm -rf ~/.ssh
