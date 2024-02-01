@@ -34,14 +34,19 @@ jobs:
   #     - name: Push the Docker image
   #       run: ./gradlew :app:dockerPush
   deploy:
+    needs: publish
+    name: deploy image
     runs-on: ubuntu-latest
+
     steps:
-    # - name: Depurar 
-    #   run: echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" | wc
-    - uses: alex-ac/github-action-ssh-docker-compose@master
-      name: Docker-Compose Remote Deployment
-      with:
-        ssh_host: 186.79.101.127
-        ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        ssh_user: ${{ secrets.DEPLOY_USERNAME }}
-        
+    - name: install ssh keys
+      # check this thread to understand why its needed:
+      # <https://stackoverflow.com/a/70447517>
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DEPLOY_PUBLIC_KEY }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.DEPLOY_USERNAME }}@$186.79.101.127 "docker compose pull && docker compose up -d && exit"
+    - name: cleanup
+      run: rm -rf ~/.ssh
