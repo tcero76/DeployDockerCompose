@@ -64,7 +64,7 @@ jobs:
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
-        echo $INPUT_DOCKER_COMPOSE
+        ls -la $INPUT_DOCKER_COMPOSE
         cat $INPUT_DOCKER_COMPOSE
         ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
         # 🧹 Remove $HOME/.ssh folder
