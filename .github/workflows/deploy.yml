@@ -48,11 +48,37 @@ jobs:
     - name: install ssh keys
       # check this thread to understand why its needed:
       # <https://stackoverflow.com/a/70447517>
+      env:
+        INPUT_SSH_HOST_KEY: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        INPUT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+        INPUT_DOCKER_HOST: 186.79.101.127
+        INPUT_DOCKER_USER: ${{ secrets.DEPLOY_USERNAME }}
+        INPUT_DOCKER_COMMAND: ps
       run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
-        echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.DEPLOY_PUBLIC_KEY }} > ~/.ssh/known_hosts
+        # Start ssh-agent
+        eval $(ssh-agent -s)
+        # Add SSH private key to agent
+        ssh-add - <<< "$INPUT_SSH_PRIVATE_KEY"
+        # Create $HOME/.ssh folder for known_hosts file
+        mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
+        # Add SSH host key to known_hosts file
+        echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
+        # Create Docker context using SSH
+        docker context create github-action --docker "host=ssh://$INPUT_DOCKER_USER@$INPUT_DOCKER_HOST"
+        # Execute docker command using created context
+        docker --context github-action $INPUT_DOCKER_COMMAND
+        # 🧹 Remove created Docker context
+        # 🧹 Remove $HOME/.ssh folder
+        rm -rf $HOME/.ssh && echo "$HOME/.ssh folder removed"
+        # 🧹 Remove SSH private key from ssh-agent
+        ssh-add -D
+        # 🧹 Stop ssh-agent
+        eval $(ssh-agent -k)
     - name: connect and pull
       run: ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
     - name: cleanup
       run: rm -rf ~/.ssh
+
+
+        # echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        # ssh-keyscan -H ${{ secrets.DEPLOY_PUBLIC_KEY }} > ~/.ssh/known_hosts
