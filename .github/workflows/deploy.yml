@@ -45,4 +45,4 @@ jobs:
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         stack_file_name: docker-compose.yml
-        args: -p myapp up -d
+        args: -p myapp up -d 
