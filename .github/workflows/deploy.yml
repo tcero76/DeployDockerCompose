@@ -38,10 +38,14 @@ jobs:
     steps:
     # - name: Depurar 
     #   run: echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" | wc
-    - name: Start Deployment 
-      uses: TapTap21/docker-remote-deployment-action@v1.0
+    - name: Deploy to Docker swarm
+      uses: sulthonzh/docker-remote-deployment-action@v1
       with:
         remote_docker_host: ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+        deployment_mode: docker-compose
+        copy_stack_file: true
+        deploy_path: /home/vagrant/my-deployment
+        stack_file_name: docker-compose.yml
         args: -p myapp up -d 
