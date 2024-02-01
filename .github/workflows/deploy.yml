@@ -55,6 +55,7 @@ jobs:
         # register the private key with the agent.
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
         printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa
+        echo "entró acá"
         cat $HOME/.ssh/id_rsa
         chmod 600 $HOME/.ssh/id_rsa
         # Add SSH private key to agent
