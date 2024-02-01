@@ -46,9 +46,6 @@ jobs:
     #     docker_user: ${{ secrets.DEPLOY_USERNAME }}
 
     - uses: actions/checkout@v4
-    - name: install ssh keys
-      # check this thread to understand why its needed:
-      # <https://stackoverflow.com/a/70447517>
       env:
         INPUT_SSH_HOST_KEY: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         INPUT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
@@ -56,6 +53,7 @@ jobs:
         INPUT_DOCKER_USER: ${{ secrets.DEPLOY_USERNAME }}
         INPUT_DOCKER_COMMAND: up -d
         INPUT_DOCKER_COMPOSE: ${{ github.workspace }}
+    - name: install ssh keys
       run: |
         # Start ssh-agent
         eval $(ssh-agent -s)
@@ -68,19 +66,18 @@ jobs:
         # Create $HOME/.ssh folder for known_hosts file
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts && echo "known_hosts updated"
-        # 🧹 Remove created Docker context
+    - name: connect and pull
+      run: |
         scp $INPUT_DOCKER_COMPOSE/docker-compose.yml $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST:~/docker-compose.yml
         ssh $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST "docker compose pull && docker compose up -d && exit"
+    - name: cleanup
+      run: |
         # 🧹 Remove $HOME/.ssh folder
         rm -rf $HOME/.ssh && echo "$HOME/.ssh folder removed"
         # 🧹 Remove SSH private key from ssh-agent
         ssh-add -D
         # 🧹 Stop ssh-agent
         eval $(ssh-agent -k) 
-    # - name: connect and pull
-    #   run: 
-    # - name: cleanup
-    #   run: rm -rf ~/.ssh
 
 
         # echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
