@@ -64,10 +64,10 @@ jobs:
         printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         # Add SSH private key to agent
-        ssh-add ~/.ssh/id_rsa && echo ~/.ssh/id_rsa
+        ssh-add ~/.ssh/id_rsa && cat ~/.ssh/id_rsa
         # Create $HOME/.ssh folder for known_hosts file
         # Add SSH host key to known_hosts file
-        echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts && echo $HOME/.ssh/known_hosts
+        echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts && cat $HOME/.ssh/known_hosts
         # 🧹 Remove created Docker context
         scp -i ~/.ssh/id_rsa $INPUT_DOCKER_COMPOSE/docker-compose.yml $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST:/docker-compose.yml
         ssh $INPUT_DOCKER_USER@$INPUT_DOCKER_HOST "docker compose pull && docker compose up -d && exit"
