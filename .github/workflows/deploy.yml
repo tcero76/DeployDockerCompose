@@ -44,6 +44,5 @@ jobs:
         remote_docker_host: ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-        docker_compose_filename: docker-compose.yml
         workspace_keep: true 
         args: -p myapp up -d
