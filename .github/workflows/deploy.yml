@@ -39,7 +39,7 @@ jobs:
     - name: Depurar
       env:
         DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-      run: echo "$DEPLOY_USERNAME@186.79.101.127"
+      run: echo "$DEPLOY_USERNAME@186.79.101.127" | wc
     - name: Start Deployment
       uses: TapTap21/docker-remote-deployment-action@v1.0
       with:
