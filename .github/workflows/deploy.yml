@@ -58,7 +58,7 @@ jobs:
         chmod 600 $HOME/.ssh/id_rsa
         # Add SSH private key to agent
         echo "se estaría cayendo en el último"
-        ssh-add <(echo "$INPUT_SSH_PRIVATE_KEY")
+        # ssh-add $HOME/.ssh/id_rsa
     - name: connect and pull
       env:
         INPUT_SSH_HOST_KEY: ${{ secrets.DEPLOY_PUBLIC_KEY }}
