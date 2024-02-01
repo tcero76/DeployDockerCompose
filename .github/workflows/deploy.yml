@@ -66,6 +66,7 @@ jobs:
         # Add SSH host key to known_hosts file
         echo "$INPUT_DOCKER_HOST $INPUT_SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
         # # 🧹 Remove created Docker context
+        chmod 777 $INPUT_DOCKER_COMPOSE/docker-compose.yml
         scp -i "$HOME/.ssh/id_rsa" \
           -o UserKnownHostsFile=/dev/null \
           -o StrictHostKeyChecking=no \
