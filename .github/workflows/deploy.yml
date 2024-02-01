@@ -70,7 +70,7 @@ jobs:
           -o UserKnownHostsFile=/dev/null \
           -o StrictHostKeyChecking=no \
           -P 22 \
-          $INPUT_DOCKER_COMPOSE:/docker-compose.yml "${{ secrets.DEPLOY_USERNAME }}@186.79.101.127/docker-compose.yml" 
+          $INPUT_DOCKER_COMPOSE/docker-compose.yml "${{ secrets.DEPLOY_USERNAME }}@186.79.101.127:/docker-compose.yml" 
         ssh ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127 "docker compose pull && docker compose up -d && exit"
         # 🧹 Remove $HOME/.ssh folder
         rm -rf $HOME/.ssh && echo "$HOME/.ssh folder removed"
