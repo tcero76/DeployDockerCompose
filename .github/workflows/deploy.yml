@@ -44,4 +44,4 @@ jobs:
         remote_docker_host: ${{ secrets.DEPLOY_USERNAME }}@186.79.101.127
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         ssh_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-        args: -p myapp up -d
+        args: -p myapp up -d 
