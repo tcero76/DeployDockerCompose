@@ -41,8 +41,6 @@ jobs:
       name: Docker-Compose Remote Deployment
       with:
         ssh_host: 186.79.101.127
-        ssh_port: 22
         ssh_user: ${{ secrets.DEPLOY_USERNAME }}
         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-        ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         docker_compose_prefix: myapp
