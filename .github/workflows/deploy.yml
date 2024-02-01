@@ -73,7 +73,7 @@ jobs:
         # 🧹 Remove SSH private key from ssh-agent
         ssh-add -D
         # 🧹 Stop ssh-agent
-        eval $(ssh-agent -k)
+        eval $(ssh-agent -k) 
     # - name: connect and pull
     #   run: 
     # - name: cleanup
