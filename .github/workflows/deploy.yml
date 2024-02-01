@@ -54,12 +54,11 @@ jobs:
         eval $(ssh-agent -s)
         # register the private key with the agent.
         mkdir $HOME/.ssh && echo "$HOME/.ssh folder created"
-        printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa && echo $INPUT_SSH_PRIVATE_KEY
-        cat ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > $HOME/.ssh/id_rsa && echo $INPUT_SSH_PRIVATE_KEY
+        cat $HOME/.ssh/id_rsa
+        chmod 600 $HOME/.ssh/id_rsa
         # Add SSH private key to agent
-        ssh-add ~/.ssh/id_rsa && echo "SSH ADD lock ~/.ssh/id_rsa" 
-        # Create $HOME/.ssh folder for known_hosts file
+        ssh-add $HOME/.ssh/id_rsa && echo "SSH ADD lock $HOME/.ssh/id_rsa" 
     - name: connect and pull
       env:
         INPUT_SSH_HOST_KEY: ${{ secrets.DEPLOY_PUBLIC_KEY }}
