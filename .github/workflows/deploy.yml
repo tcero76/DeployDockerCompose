@@ -51,7 +51,7 @@ jobs:
         INPUT_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
         INPUT_SSH_HOST_KEY: ${{ secrets.DEPLOY_PUBLIC_KEY }}
         INPUT_DOCKER_USER: ${{ secrets.DEPLOY_USERNAME }}
-        INPUT_DOCKER_HOST: 186.79.101.127
+        INPUT_DOCKER_HOST: ${{ secrets.DEPLOY_HOST }}
         INPUT_DOCKER_COMPOSE: ${{ github.workspace }}
       run: |
         # Start ssh-agent
