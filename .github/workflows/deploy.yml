@@ -31,7 +31,7 @@ jobs:
   #       run: chmod +x gradlew
   #     - name: Build with Gradle
   #       run: ./gradlew clean build
-  #     - name: Push the Docker image
+  #     - name: Push the Docker image 
   #       run: ./gradlew :app:dockerPush
   deploy:
     runs-on: ubuntu-latest
