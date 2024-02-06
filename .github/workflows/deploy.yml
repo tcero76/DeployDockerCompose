@@ -36,15 +36,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    # - name: List images on remote Docker host
-    #   uses: 38ri581oq480/docker-run-command-remote-host-action@v0.0.1
-    #   with:
-    #     ssh_host_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-    #     ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-    #     docker_host: 186.79.101.127
-    #     docker_command: image ls
-    #     docker_user: ${{ secrets.DEPLOY_USERNAME }}
-
     - uses: actions/checkout@v4
     - name: install ssh keys
       env:
